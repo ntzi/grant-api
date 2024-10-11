@@ -7,5 +7,6 @@ import { Grant } from './grants.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Grant])],
   providers: [GrantsService, GrantsResolver],
+  exports: [TypeOrmModule],
 })
 export class GrantsModule {}

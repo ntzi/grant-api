@@ -6,6 +6,7 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GrantsModule } from './grants/grants.module';
+import { SeederService } from './seeder/seeder.service';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { GrantsModule } from './grants/grants.module';
     GrantsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SeederService],
 })
 export class AppModule {}
