@@ -1,0 +1,20 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Grant {
+  id: ID!
+  title: String!
+  description: String!
+  isApproved: Boolean!
+  feedback: String
+}
+
+type Query {
+  grants: [Grant!]!
+}
+
+type Mutation {
+  approveGrant(id: String!, feedback: String): Grant!
+  rejectGrant(id: String!, feedback: String): Grant!
+}
