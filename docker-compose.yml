@@ -5,7 +5,7 @@ services:
     volumes:
       - ./:/app
     ports:
-      - '3000:3000'
+      - '4004:3000'
     environment:
       DATABASE_URL: 'postgres://user:password@db:5432/grantsdb'
     depends_on:

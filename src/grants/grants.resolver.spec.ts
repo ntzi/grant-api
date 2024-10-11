@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GrantsResolver } from './grants.resolver';
 import { GrantsService } from './grants.service';
-import { Grant } from './grants.model';
+import { Grant } from './grants.entity';
 
 describe('GrantsResolver', () => {
   let resolver: GrantsResolver;

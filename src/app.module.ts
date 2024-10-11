@@ -11,13 +11,13 @@ import { GrantsModule } from './grants/grants.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
       port: 5432,
       username: 'user',
       password: 'password',
       database: 'grantsdb',
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-      synchronize: true, // Do not use in production (for dev only)
+      synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

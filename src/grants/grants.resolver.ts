@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { GrantsService } from './grants.service';
-import { Grant } from './grants.model';
+import { Grant } from './grants.entity';
 
 @Resolver(() => Grant)
 export class GrantsResolver {

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GrantsService } from './grants.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Grant } from './grant.entity';
+import { Grant } from './grants.entity';
 import { v4 as uuid } from 'uuid';
 
 describe('GrantsService', () => {

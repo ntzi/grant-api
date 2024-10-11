@@ -16,5 +16,5 @@ type Query {
 
 type Mutation {
   approveGrant(id: String!, feedback: String): Grant!
-  rejectGrant(id: String!, feedback: String): Grant!
+  rejectGrant(id: String!): Grant!
 }
