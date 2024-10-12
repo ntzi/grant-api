@@ -10,25 +10,34 @@ export class GrantsService {
     private grantsRepository: Repository<Grant>,
   ) {}
 
-  findAll(): Promise<Grant[]> {
-    return this.grantsRepository.find();
+  findAll(tenantId: string): Promise<Grant[]> {
+    return this.grantsRepository.find({ where: { tenantId } });
   }
 
-  async approveGrant(id: string, feedback?: string): Promise<Grant> {
-    const grant = await this.grantsRepository.findOne({ where: { id } });
+  async approveGrant(
+    id: string,
+    tenantId: string,
+    feedback?: string,
+  ): Promise<Grant> {
+    const grant = await this.grantsRepository.findOne({
+      where: { id, tenantId },
+    });
     if (grant) {
       grant.isApproved = true;
       grant.feedback = feedback;
-      await this.grantsRepository.save(grant);
+      return this.grantsRepository.save(grant);
     }
-    return grant;
+    throw new Error('Grant not found or unauthorized access');
   }
 
-  async rejectGrant(id: string): Promise<Grant> {
-    const grant = await this.grantsRepository.findOne({ where: { id } });
+  async rejectGrant(id: string, tenantId: string): Promise<Grant> {
+    const grant = await this.grantsRepository.findOne({
+      where: { id, tenantId },
+    });
     if (grant) {
       await this.grantsRepository.remove(grant);
+      return grant;
     }
-    return grant;
+    throw new Error('Grant not found or unauthorized access');
   }
 }

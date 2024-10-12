@@ -13,6 +13,8 @@ describe('GrantsResolver', () => {
     rejectGrant: jest.fn(),
   };
 
+  const tenantId = 'example-tenant-1';
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -37,60 +39,73 @@ describe('GrantsResolver', () => {
   });
 
   describe('getAllGrants', () => {
-    it('should return an array of grants', async () => {
+    it('should return an array of grants for a tenant', async () => {
       const grants: Grant[] = [
         {
           id: '1',
           title: 'Grant A',
           description: 'Description A',
           isApproved: false,
+          tenantId,
         },
         {
           id: '2',
           title: 'Grant B',
           description: 'Description B',
           isApproved: true,
+          tenantId,
         },
       ];
-      mockGrantsService.findAll.mockReturnValue(grants);
+      mockGrantsService.findAll.mockResolvedValue(grants);
 
-      const result = await resolver.getAllGrants();
+      const context = { req: { headers: { 'tenant-id': tenantId } } };
+      const result = await resolver.getAllGrants(context);
+
       expect(result).toEqual(grants);
-      expect(service.findAll).toHaveBeenCalled();
+      expect(service.findAll).toHaveBeenCalledWith(tenantId);
     });
   });
 
   describe('approveGrant', () => {
-    it('should approve a grant and return it', async () => {
+    it('should approve a grant for the given tenant', async () => {
       const grant: Grant = {
         id: '1',
         title: 'Grant A',
         description: 'Description A',
         isApproved: true,
         feedback: 'Looks good',
+        tenantId,
       };
-      mockGrantsService.approveGrant.mockReturnValue(grant);
+      mockGrantsService.approveGrant.mockResolvedValue(grant);
 
-      const result = await resolver.approveGrant('1', 'Looks good');
+      const context = { req: { headers: { 'tenant-id': tenantId } } };
+      const result = await resolver.approveGrant('1', 'Looks good', context);
+
       expect(result).toEqual(grant);
-      expect(service.approveGrant).toHaveBeenCalledWith('1', 'Looks good');
+      expect(service.approveGrant).toHaveBeenCalledWith(
+        '1',
+        tenantId,
+        'Looks good',
+      );
     });
   });
 
   describe('rejectGrant', () => {
-    it('should reject a grant and return it', async () => {
+    it('should remove a grant for the given tenant', async () => {
       const grant: Grant = {
         id: '2',
         title: 'Grant B',
         description: 'Description B',
         isApproved: false,
-        feedback: 'Not suitable',
+        tenantId,
       };
-      mockGrantsService.rejectGrant.mockReturnValue(grant);
+      mockGrantsService.rejectGrant.mockResolvedValue(grant);
 
-      const result = await resolver.rejectGrant('2');
+      const context = { req: { headers: { 'tenant-id': tenantId } } };
+      const result = await resolver.rejectGrant('2', context);
+
       expect(result).toEqual(grant);
-      expect(service.rejectGrant).toHaveBeenCalledWith('2');
+      expect(service.rejectGrant).toHaveBeenCalledWith('2', tenantId);
     });
   });
 });

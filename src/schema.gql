@@ -8,6 +8,7 @@ type Grant {
   description: String!
   isApproved: Boolean!
   feedback: String
+  tenantId: String!
 }
 
 type Query {

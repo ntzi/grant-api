@@ -1,5 +1,5 @@
-import { Field, ObjectType, ID } from '@nestjs/graphql';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
 @Entity()
@@ -23,4 +23,8 @@ export class Grant {
   @Field({ nullable: true })
   @Column({ nullable: true })
   feedback?: string;
+
+  @Field()
+  @Column()
+  tenantId: string; // This column will store the tenant ID for each grant
 }

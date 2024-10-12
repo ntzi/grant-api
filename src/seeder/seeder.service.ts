@@ -39,17 +39,20 @@ export class SeederService implements OnModuleInit {
         description: 'A grant for community support initiatives.',
         isApproved: false,
         feedback: 'Needs more details',
+        tenantId: 'example-tenant-1',
       },
       {
         title: 'Innovation Grant',
         description: 'A grant for innovative projects in technology.',
         isApproved: true,
         feedback: 'Looks good',
+        tenantId: 'example-tenant-1',
       },
       {
         title: 'Research Grant',
         description: 'A grant for academic research projects.',
         isApproved: false,
+        tenantId: 'example-tenant-2',
       },
     ];
 

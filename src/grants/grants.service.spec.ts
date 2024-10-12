@@ -9,18 +9,22 @@ describe('GrantsService', () => {
   let service: GrantsService;
   let repository: Repository<Grant>;
 
+  const tenantId = 'example-tenant-1';
+
   const grantArray = [
     {
       id: uuid(),
       title: 'Grant A',
       description: 'Description A',
       isApproved: false,
+      tenantId,
     },
     {
       id: uuid(),
       title: 'Grant B',
       description: 'Description B',
       isApproved: true,
+      tenantId,
     },
   ];
 
@@ -55,15 +59,15 @@ describe('GrantsService', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of grants', async () => {
-      const grants = await service.findAll();
+    it('should return an array of grants for a given tenant', async () => {
+      const grants = await service.findAll(tenantId);
       expect(grants).toEqual(grantArray);
-      expect(repository.find).toHaveBeenCalled();
+      expect(repository.find).toHaveBeenCalledWith({ where: { tenantId } });
     });
   });
 
   describe('approveGrant', () => {
-    it('should approve a grant and save it', async () => {
+    it('should approve a grant for a given tenant', async () => {
       const grant = {
         ...grantArray[0],
         isApproved: true,
@@ -72,24 +76,28 @@ describe('GrantsService', () => {
       grantRepositoryMock.findOne.mockResolvedValue(grantArray[0]);
       grantRepositoryMock.save.mockResolvedValue(grant);
 
-      const result = await service.approveGrant(grant.id, 'Looks good');
+      const result = await service.approveGrant(
+        grant.id,
+        tenantId,
+        'Looks good',
+      );
       expect(result).toEqual(grant);
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { id: grant.id },
+        where: { id: grant.id, tenantId },
       });
       expect(repository.save).toHaveBeenCalledWith(grant);
     });
   });
 
   describe('rejectGrant', () => {
-    it('should remove a grant', async () => {
+    it('should remove a grant for a given tenant', async () => {
       const grant = grantArray[0];
       grantRepositoryMock.findOne.mockResolvedValue(grant);
 
-      const result = await service.rejectGrant(grant.id);
+      const result = await service.rejectGrant(grant.id, tenantId);
       expect(result).toEqual(grant);
       expect(repository.findOne).toHaveBeenCalledWith({
-        where: { id: grant.id },
+        where: { id: grant.id, tenantId },
       });
       expect(repository.remove).toHaveBeenCalledWith(grant);
     });
